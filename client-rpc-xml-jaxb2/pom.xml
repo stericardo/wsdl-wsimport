@@ -4,9 +4,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 	<groupId>com.stevenprogramming.javaee</groupId>
-    <artifactId>wsdl-service-client-rpcxml</artifactId>
+    <artifactId>wsdl-service-client-rpcxml-jaxb2</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>WSDL Service and client RPC</name>
+    <name>WSDL Service and client JAXB2</name>
     <packaging>war</packaging>
     <description>JavaEE wsdl client</description>
 	
@@ -36,24 +36,29 @@
 			</plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxws-maven-plugin</artifactId>
-                <version>2.6</version>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <clearOutputDir>false</clearOutputDir>
+                    <extension>true</extension>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>CSPaymentWS_21_0-xjc</id>
                         <goals>
-                            <goal>wsimport</goal>
+                            <goal>xjc</goal>
                         </goals>
+                        <configuration>
+                            <schemaDirectory>src/main/wsdl</schemaDirectory>
+                            <schemaFiles>person.wsdl</schemaFiles>
+                            <packageName>com.aa.cspayment.v21</packageName>
+                            <wsdl>true</wsdl>
+                            <xmlschema>false</xmlschema>
+                            <clearOutputDir>false</clearOutputDir>
+                            <staleFile>${project.build.directory}/jaxb2/.CSPaymentWS_21_0_xjcStaleFlag</staleFile>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <wsdlDirectory>src/main/wsdl</wsdlDirectory>
-                    <wsdlFiles>
-                        <wsdlFile>${project.basedir}/src/main/wsdl/person.wsdl</wsdlFile>
-                    </wsdlFiles>
-                    <packageName>com.stevenprogramming.soap.ws.client</packageName>
-                    <sourceDestDir>${project.build.directory}/generated-sources/
-                    </sourceDestDir>
-                </configuration>
             </plugin>
         </plugins>
     </build>

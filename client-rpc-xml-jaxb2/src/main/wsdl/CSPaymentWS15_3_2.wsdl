@@ -1,0 +1,4273 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="CSPaymentWS_15_3" targetNamespace="http://cs.ct.aa/payment" xmlns="http://cs.ct.aa/payment"
+	xmlns:csping="http://payment.common.ct.aa/operation/ping" xmlns:fault="http://payment.common.ct.aa/fault"
+	xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+	xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:documentation>
+		WSDL Version: 15_3, Common XSD Version: 33_2
+	</wsdl:documentation>
+	<wsdl:types>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://payment.common.ct.aa/operation/ping" version="2.0" xmlns="http://payment.common.ct.aa/operation/ping"
+			xmlns:csping="http://payment.common.ct.aa/operation/ping" xmlns:datasource="http://payment.common.ct.aa/datasource"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://payment.common.ct.aa/datasource" />
+			<xsd:import namespace="http://payment.common.ct.aa/operation/header" />
+			<!-- PingRequest.xsd -->
+
+
+			<xsd:element name="PingRequest">
+				<xsd:annotation>
+					<xsd:documentation>
+						The Ping request is used to determine if a service is running. All Web Services should have a ping operation.
+						By default the Ping operation is a light ping. This means it does not test that its resources are available.
+						See the element deepPing for testing resources of the service you are Pinging.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element minOccurs="0" name="deepPing" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>
+									This is optional. By default, the ping operation is a light ping. It just indicates that the service
+									is available. To validate that all of its resources are available set the deepPing element to true.
+									The deepPing can be expensive and is designed to be mainly used for troubleshooting or validating a
+									configuration of services. For deep ping booking engine info has to be provided.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information. It has to be provided if deepPing is set to true.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/datasource"
+			version="2.0" xmlns="http://payment.common.ct.aa/datasource" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- BookingEngineInfoType.xsd -->
+
+
+			<xsd:complexType name="BookingEngineInfoType">
+				<xsd:sequence>
+					<xsd:element name="hostPartition" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Sabre Host Name from the list RES,
+								TSTSA, TSTSB, CERT.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="hostSystemCommands" type="xsd:boolean">
+						<xsd:annotation>
+							<xsd:documentation>Indicates if Host System command history is to be recorded.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="useCache" type="CacheEnumType">
+						<xsd:annotation>
+							<xsd:documentation>Optional (Production behavior: do not pass in). Indicates how the service should cache
+								transactions.
+								Note: cached transactions are associated with a transaction id. Cached Transactions
+								should only be used for testing
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- PseudoCityStationType.xsd -->
+
+			<xsd:complexType name="PseudoCityStationType">
+				<xsd:annotation>
+					<xsd:documentation>key data for a station</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="employeeId" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>employee id of the PseudoCityStation</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="stationId" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>station id for the PseudoCityStation</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="stationName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>station name for the PseudoCityStation</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ctCommonDataSource.xsd -->
+			<!-- UserProfileRequestType.xsd -->
+
+
+			<xsd:complexType name="UserProfileRequestType">
+				<xsd:annotation>
+					<xsd:documentation>
+						Provides the attributes needed in order to lookup a particular Orbitz AAUserProfile.
+						There are two ways of setting the Orbitz AAUserProfile:
+						Using an airportCode and then orbitz uses this airport code in order to match it with their TA Pool properties files.
+						Using PseudoCityStation information by setting the employeeId, stationId and stationName.
+						UserProfileRequestType provides this two possibilities by setting an airport Code or PseudoCityStation information.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:choice>
+						<xsd:element name="originAirportCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The airport code is used in order lookup an Orbitz AAUserProfile with a STATION_ID
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="pseudoCityStation" type="PseudoCityStationType">
+							<xsd:annotation>
+								<xsd:documentation>
+									The pseudoCityStation element is used in order to lookup an Orbitz AAUserProfile with an
+									Orbitz PseudoCityStation according to the stationName, stationId and employeeId
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- CacheEnumType.xsd -->
+
+			<xsd:simpleType name="CacheEnumType">
+				<xsd:annotation>
+					<xsd:documentation>
+						The CacheEnumType represents how you want Host System data caching to work. NO_CACHE clears the cache for
+						the operation (default value). CACHE says to Cache the response associated with a returned Transaction ID.
+						Refresh indicates to reply the transaction and refresh the cache with the new values
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="NO_CACHE" />
+					<xsd:enumeration value="CACHE" />
+					<xsd:enumeration value="REFRESH" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/generic"
+			version="2.0" xmlns="http://payment.common.ct.aa/generic" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- PhoneType.xsd -->
+
+
+			<xsd:complexType name="PhoneType">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="countryCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>phone country code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="areaCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>phone area code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="number" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>phone number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="extension" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>phone extension.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="type" type="PhoneEnumType">
+						<xsd:annotation>
+							<xsd:documentation>phone type such as home, business, cell, etc.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="unformattedHostPhoneData" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>raw host data used to create this phone number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- GenderEnumType.xsd -->
+
+			<xsd:simpleType name="GenderEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="Male" />
+					<xsd:enumeration value="Female" />
+					<xsd:enumeration value="Unspecified" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- PhoneEnumType.xsd -->
+
+			<xsd:simpleType name="PhoneEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="HOME" />
+					<xsd:enumeration value="BUSINESS" />
+					<xsd:enumeration value="FAX" />
+					<xsd:enumeration value="CELL" />
+					<xsd:enumeration value="LOCAL" />
+					<xsd:enumeration value="ASST" />
+					<xsd:enumeration value="OTHER" />
+					<xsd:enumeration value="PAGER" />
+					<xsd:enumeration value="UNSPECIFIED" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- PersonType.xsd -->
+
+
+			<xsd:complexType name="PersonType">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="gender" type="GenderEnumType">
+						<xsd:annotation>
+							<xsd:documentation>person's gender</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="namePrefix" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Name prefix.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="namePrefixCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Name prefix code.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="firstName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>First name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="middleName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Middle name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="lastName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Last name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="nameSuffix" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Name suffix.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="nameSuffixCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Name suffix code.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="age" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>person age</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="dateOfBirth" type="xsd:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>person age</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="completeFirstName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Complete First name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="completeMiddleName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Complete Middle name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="completeLastName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Complete Last name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/utility"
+			version="2.0" xmlns="http://payment.common.ct.aa/utility" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- DayOfWeekEnumType.xsd -->
+
+			<xsd:simpleType name="DayOfWeekEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="SUNDAY" />
+					<xsd:enumeration value="MONDAY" />
+					<xsd:enumeration value="TUESDAY" />
+					<xsd:enumeration value="WEDNESDAY" />
+					<xsd:enumeration value="THURSDAY" />
+					<xsd:enumeration value="FRIDAY" />
+					<xsd:enumeration value="SATURDAY" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://payment.common.ct.aa/airline/documents" version="2.0"
+			xmlns="http://payment.common.ct.aa/airline/documents" xmlns:airline="http://payment.common.ct.aa/airline"
+			xmlns:csping="http://payment.common.ct.aa/operation/ping" xmlns:fault="http://payment.common.ct.aa/fault"
+			xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://payment.common.ct.aa/airline" />
+			<!-- StateIssuedIDType.xsd -->
+
+
+			<xsd:complexType name="StateIssuedIDType">
+				<xsd:annotation>
+					<xsd:documentation>person's State Issued ID such as Driver's Lic Number or State ID
+						Used for places such as when paying for ticked by eCheck
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="idNumber" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>ID number
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="expDate" type="xsd:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>expiration date
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="issuingState" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>issuing state
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="aaDocument" type="xsd:boolean">
+						<xsd:annotation>
+							<xsd:documentation>indicates whether it is AA or OA travel document</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="carrier" type="airline:CarrierType">
+						<xsd:annotation>
+							<xsd:documentation>Carrier information.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/location"
+			version="2.0" xmlns="http://payment.common.ct.aa/location" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- StateProvinceType.xsd -->
+
+
+			<xsd:complexType name="StateProvinceType">
+				<xsd:sequence>
+					<xsd:element name="stateProvinceCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>State/Province code.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="stateProvinceName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>State/Province name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="country" type="CountryType">
+						<xsd:annotation>
+							<xsd:documentation>Country.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- CountryType.xsd -->
+
+
+			<xsd:complexType name="CountryType">
+				<xsd:sequence>
+					<xsd:element name="countryCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Country code.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="countryName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Country name.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="countryCodeList" type="CountryCodeListType">
+						<xsd:annotation>
+							<xsd:documentation>List of country codes used for this country (possibly on other languages).</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- CountryCodeListType.xsd -->
+
+			<xsd:complexType name="CountryCodeListType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="countryCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>List of country codes.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- AddressEnumType.xsd -->
+
+			<xsd:simpleType name="AddressEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="BILLING" />
+					<xsd:enumeration value="SHIPPING" />
+					<xsd:enumeration value="PERMANENT" />
+					<xsd:enumeration value="LOCAL" />
+					<xsd:enumeration value="DELIVERY" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- AddressType.xsd -->
+
+
+			<xsd:complexType name="AddressType">
+				<xsd:sequence>
+					<xsd:element name="lineOne" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Address line one.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="lineTwo" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Address line two.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="city" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Address city.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:choice>
+						<xsd:annotation>
+							<xsd:documentation>Either state or country must be populated but not both.
+							</xsd:documentation>
+						</xsd:annotation>
+
+						<xsd:element name="state" type="StateProvinceType">
+							<xsd:annotation>
+								<xsd:documentation>State, province and country information. Applicable for US/Canada addresses.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="country" type="CountryType">
+							<xsd:annotation>
+								<xsd:documentation>Country information. Applicable for non-US/Canada addresses.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:choice>
+					<xsd:element name="zip" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Address zip code.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="type" type="AddressEnumType">
+						<xsd:annotation>
+							<xsd:documentation>Type of address, such as billing, shipping etc.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="nameOfPlace" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>name of place</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+				</xsd:sequence>
+			</xsd:complexType>
+
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+			targetNamespace="http://payment.common.ct.aa/operation/header" version="2.1" xmlns="http://payment.common.ct.aa/operation/header"
+			xmlns:csping="http://payment.common.ct.aa/operation/ping" xmlns:fault="http://payment.common.ct.aa/fault"
+			xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- RequestHeaderType.xsd -->
+
+
+
+			<xsd:complexType name="RequestHeaderType">
+				<xsd:annotation>
+					<xsd:documentation>Each request must have a element called
+						"requestHeader" that is of type RequestHeaderType. The Domain
+						Service Bus (DSB), uses this information (wsdlVersion, ServiceType,
+						implVersion) to build the EndPoint URL to the requested service.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element minOccurs="1" name="clientID" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The Client ID identifies the calling client
+								application. This should be a unique ID for each client. If the
+								service calls are chained together the client ID's should be
+								separated by a "|" character. Example: "AACOM|CSPaymentWS1_8_5"
+								indicates that AACOM is the origin calling application and
+								CSPaymentWS1_8_5 is making a call to this service for AACOM,
+								showing the dependency on this service with CSPaymentWS8_1_5. This
+								is a REQUIRED field.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element fixed="15_3" name="wsdlVersion" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The WSDL Version defines the WSDL interface
+								version that the requesting client has bound too. The DSB uses
+								this information to build part of the EndPoint URL. This field is
+								REQUIRED.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element fixed="CSPaymentWS" name="serviceType" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The serviceType defines the Service Type that
+								this request is calling. The combination of this and the
+								wsdlVersion tells the DSB what Data Power Proxy to call to
+								determine how to build the EndPoint URL. This is a field is
+								REQUIRED.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="implVersion" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The Implementation Version is the version
+								that the client application is binding to during testing. This
+								element is OPTIONAL. This will be the version by default that the
+								DSB will route the clients request to. The DSB can override this
+								value only when a Data Power rule has been applied. If the client
+								chooses not to send this data, the DSB will route to the latest
+								implementation for the WSDL version.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="transactionID" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The transactionID is a optional value that indicates the requester
+								wants to associate this request with a transactionID returned in a previous response.
+								This is also used when wanting to play back Cached data
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="clientStartTime" type="xsd:dateTime">
+						<xsd:annotation>
+							<xsd:documentation>If client provides this, it will be used with the providerTimeoutValue to calculate the
+								timeout time.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="providerTimeoutValue" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>Provider requested timeout value in msecs. If provider operation
+								supports this, then the provider will time the current operation and report
+								an error if timeout exceeded.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ServiceInfoType.xsd -->
+
+			<xsd:complexType name="ServiceInfoType">
+				<xsd:sequence>
+					<xsd:element name="serviceName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The Name of the Service</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="serviceInstance" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								The Service Instance identifies the Application Server Instance that created this response.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="wSDLVersion" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The WSDL Version that this service supports</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="implementationVersion" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>The Implementation Version of this service</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="buildDate" type="xsd:date">
+						<xsd:annotation>
+							<xsd:documentation>The Date that this Service Version was built</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ResponseHeaderType.xsd -->
+
+
+			<xsd:complexType name="ResponseHeaderType">
+				<xsd:annotation>
+					<xsd:documentation>
+						Each Web Service response should include the ResponseHeaderType and name the element responseHeader.
+						This data is used by testing tools to validate Domain Service Bus (DSB) routing and can also be used
+						to in troubling shooting web service calls. (Who call who)
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="responseStatus" type="ResponseStatusType">
+						<xsd:annotation>
+							<xsd:documentation>
+								Each response will have a status code and message indicating the status to the request.
+								If the status code is zero (numeric 0), than a pay load of data should be present in the
+								surrounding response. Otherwise there will NOT be any pay load in the response and the
+								client application will need to take the correct action related to the returned status code.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="1" name="serviceInfo" type="ServiceInfoType">
+						<xsd:annotation>
+							<xsd:documentation>
+								Information about all services that participated in this transaction. Every web service
+								should add their status information to their response so the calling client can see
+								all services involved in the transaction. This information will also be used to test the
+								routing rules of the Domain Service Bus (DSB).
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="transactionID" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								A unique transaction ID that can be given to the called service to identify this transaction
+								when reviewing the actions taken at the Host System Level
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ResponseStatusType.xsd -->
+
+			<xsd:complexType name="ResponseStatusType">
+				<xsd:sequence>
+					<xsd:element name="code" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>
+								This is the status code that identifies the status of the request
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element name="message" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>This is the text message of the status of the request</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/airline"
+			version="2.0" xmlns="http://payment.common.ct.aa/airline" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- CarrierType.xsd -->
+
+
+			<xsd:complexType name="CarrierType">
+				<xsd:sequence>
+					<xsd:element name="code" type="AirlineCodeType">
+						<xsd:annotation>
+							<xsd:documentation>Carrier code.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="name" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Carrier name</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- AirlineCodeType.xsd -->
+
+			<xsd:simpleType name="AirlineCodeType">
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="([0-9]|[A-Z]){2}" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<!-- AirportCodeType.xsd -->
+
+			<xsd:simpleType name="AirportCodeType">
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="[A-Z]{3}" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- PassengerEnumType.xsd -->
+
+			<xsd:simpleType name="PassengerEnumType">
+				<xsd:annotation>
+					<xsd:documentation>Enumeration of passenger types</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="ADULT" />
+					<xsd:enumeration value="CHILD" />
+					<xsd:enumeration value="SENIOR" />
+					<xsd:enumeration value="SEATED_INFANT" />
+					<xsd:enumeration value="LAP_INFANT" />
+					<xsd:enumeration value="COMPANION" />
+					<xsd:enumeration value="YOUTH" />
+					<xsd:enumeration value="FEDERAL_GOVT" />
+					<xsd:enumeration value="MILITARY" />
+					<xsd:enumeration value="STATE_GOVT" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/payment"
+			version="2.0" xmlns="http://payment.common.ct.aa/payment" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:documents="http://payment.common.ct.aa/airline/documents" xmlns:fault="http://payment.common.ct.aa/fault"
+			xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://payment.common.ct.aa/airline/documents" />
+			<xsd:import namespace="http://payment.common.ct.aa/generic" />
+			<!-- CheckPaymentType.xsd -->
+
+
+			<xsd:complexType name="CheckPaymentType">
+				<xsd:annotation>
+					<xsd:documentation>Holds the payment information for a flight reservation.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="eCheck" type="EcheckType">
+						<xsd:annotation>
+							<xsd:documentation>echeck info</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="stateIssuedIDCard" type="documents:StateIssuedIDType">
+						<xsd:annotation>
+							<xsd:documentation>state issued ID</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="telephoneNumber" type="generic:PhoneType">
+						<xsd:annotation>
+							<xsd:documentation>telephone number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" name="amounts" type="OfferAmountType">
+						<xsd:annotation>
+							<xsd:documentation>offer amounts</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- CurrencyEnumType.xsd -->
+
+			<xsd:simpleType name="CurrencyEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:annotation>
+						<xsd:documentation>This type represents the ISO 4217 Currency
+							Code List plus the NUC code that the Airline industry uses
+						</xsd:documentation>
+					</xsd:annotation>
+
+					<xsd:enumeration value="NUC">
+						<xsd:annotation>
+							<xsd:documentation>The Neutral Unit of Construction or Neutral Unit of Currency (code: NUC) is a private
+								currency used by the airline industry, to record fare calculation information
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AED">
+						<xsd:annotation>
+							<xsd:documentation>United Arab Emirates, Dirhams</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AFN">
+						<xsd:annotation>
+							<xsd:documentation>Afghanistan, Afghanis</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ALL">
+						<xsd:annotation>
+							<xsd:documentation>Albania, Leke</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AMD">
+						<xsd:annotation>
+							<xsd:documentation>Armenia, Drams</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ANG">
+						<xsd:annotation>
+							<xsd:documentation>Netherlands Antilles, Guilders (also called Florins)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AOA">
+						<xsd:annotation>
+							<xsd:documentation>Angola, Kwanza</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ARS">
+						<xsd:annotation>
+							<xsd:documentation>Argentina, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AUD">
+						<xsd:annotation>
+							<xsd:documentation>Australia, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AWG">
+						<xsd:annotation>
+							<xsd:documentation>Aruba, Guilders (also called Florins)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="AZN">
+						<xsd:annotation>
+							<xsd:documentation>Azerbaijan, New Manats</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BAM">
+						<xsd:annotation>
+							<xsd:documentation>Bosnia and Herzegovina, Convertible Marka</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BBD">
+						<xsd:annotation>
+							<xsd:documentation>Barbados, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BDT">
+						<xsd:annotation>
+							<xsd:documentation>Bangladesh, Taka</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BGN">
+						<xsd:annotation>
+							<xsd:documentation>Bulgaria, Leva</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BHD">
+						<xsd:annotation>
+							<xsd:documentation>Bahrain, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BIF">
+						<xsd:annotation>
+							<xsd:documentation>Burundi, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BMD">
+						<xsd:annotation>
+							<xsd:documentation>Bermuda, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BND">
+						<xsd:annotation>
+							<xsd:documentation>Brunei Darussalam, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BOB">
+						<xsd:annotation>
+							<xsd:documentation>Bolivia, Bolivianos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BRL">
+						<xsd:annotation>
+							<xsd:documentation>Brazil, Brazil Real</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BSD">
+						<xsd:annotation>
+							<xsd:documentation>Bahamas, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BTN">
+						<xsd:annotation>
+							<xsd:documentation>Bhutan, Ngultrum</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BWP">
+						<xsd:annotation>
+							<xsd:documentation>Botswana, Pulas</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BYR">
+						<xsd:annotation>
+							<xsd:documentation>Belarus, Rubles</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="BZD">
+						<xsd:annotation>
+							<xsd:documentation>Belize, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CAD">
+						<xsd:annotation>
+							<xsd:documentation>Canada, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CDF">
+						<xsd:annotation>
+							<xsd:documentation>Congo/Kinshasa, Congolese Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CHF">
+						<xsd:annotation>
+							<xsd:documentation>Switzerland, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CLP">
+						<xsd:annotation>
+							<xsd:documentation>Chile, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CNY">
+						<xsd:annotation>
+							<xsd:documentation>China, Yuan Renminbi</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="COP">
+						<xsd:annotation>
+							<xsd:documentation>Colombia, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CRC">
+						<xsd:annotation>
+							<xsd:documentation>Costa Rica, Colones</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CUP">
+						<xsd:annotation>
+							<xsd:documentation>Cuba, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CVE">
+						<xsd:annotation>
+							<xsd:documentation>Cape Verde, Escudos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CYP">
+						<xsd:annotation>
+							<xsd:documentation>Cyprus, Pounds (expires 2008-Jan-31)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="CZK">
+						<xsd:annotation>
+							<xsd:documentation>Czech Republic, Koruny</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="DJF">
+						<xsd:annotation>
+							<xsd:documentation>Djibouti, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="DKK">
+						<xsd:annotation>
+							<xsd:documentation>Denmark, Kroner</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="DOP">
+						<xsd:annotation>
+							<xsd:documentation>Dominican Republic, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="DZD">
+						<xsd:annotation>
+							<xsd:documentation>Algeria, Algeria Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="EEK">
+						<xsd:annotation>
+							<xsd:documentation>Estonia, Krooni</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="EGP">
+						<xsd:annotation>
+							<xsd:documentation>Egypt, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ERN">
+						<xsd:annotation>
+							<xsd:documentation>Eritrea, Nakfa</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ETB">
+						<xsd:annotation>
+							<xsd:documentation>Ethiopia, Birr</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="EUR">
+						<xsd:annotation>
+							<xsd:documentation>Euro Member Countries, Euro</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="FJD">
+						<xsd:annotation>
+							<xsd:documentation>Fiji, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="FKP">
+						<xsd:annotation>
+							<xsd:documentation>Falkland Islands (Malvinas), Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GBP">
+						<xsd:annotation>
+							<xsd:documentation>United Kingdom, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GEL">
+						<xsd:annotation>
+							<xsd:documentation>Georgia, Lari</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GGP">
+						<xsd:annotation>
+							<xsd:documentation>Guernsey, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GHS">
+						<xsd:annotation>
+							<xsd:documentation>Ghana, Cedis</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GIP">
+						<xsd:annotation>
+							<xsd:documentation>Gibraltar, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GMD">
+						<xsd:annotation>
+							<xsd:documentation>Gambia, Dalasi</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GNF">
+						<xsd:annotation>
+							<xsd:documentation>Guinea, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GTQ">
+						<xsd:annotation>
+							<xsd:documentation>Guatemala, Quetzales</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="GYD">
+						<xsd:annotation>
+							<xsd:documentation>Guyana, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="HKD">
+						<xsd:annotation>
+							<xsd:documentation>Hong Kong, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="HNL">
+						<xsd:annotation>
+							<xsd:documentation>Honduras, Lempiras</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="HRK">
+						<xsd:annotation>
+							<xsd:documentation>Croatia, Kuna</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="HTG">
+						<xsd:annotation>
+							<xsd:documentation>Haiti, Gourdes</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="HUF">
+						<xsd:annotation>
+							<xsd:documentation>Hungary, Forint</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="IDR">
+						<xsd:annotation>
+							<xsd:documentation>Indonesia, Rupiahs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ILS">
+						<xsd:annotation>
+							<xsd:documentation>Israel, New Shekels</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="IMP">
+						<xsd:annotation>
+							<xsd:documentation>Isle of Man, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="INR">
+						<xsd:annotation>
+							<xsd:documentation>India, Rupees</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="IQD">
+						<xsd:annotation>
+							<xsd:documentation>Iraq, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="IRR">
+						<xsd:annotation>
+							<xsd:documentation>Iran, Rials</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ISK">
+						<xsd:annotation>
+							<xsd:documentation>Iceland, Kronur</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="JEP">
+						<xsd:annotation>
+							<xsd:documentation>Jersey, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="JMD">
+						<xsd:annotation>
+							<xsd:documentation>Jamaica, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="JOD">
+						<xsd:annotation>
+							<xsd:documentation>Jordan, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="JPY">
+						<xsd:annotation>
+							<xsd:documentation>Japan, Yen</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KES">
+						<xsd:annotation>
+							<xsd:documentation>Kenya, Shillings</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KGS">
+						<xsd:annotation>
+							<xsd:documentation>Kyrgyzstan, Soms</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KHR">
+						<xsd:annotation>
+							<xsd:documentation>Cambodia, Riels</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KMF">
+						<xsd:annotation>
+							<xsd:documentation>Comoros, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KPW">
+						<xsd:annotation>
+							<xsd:documentation>Korea (North), Won</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KRW">
+						<xsd:annotation>
+							<xsd:documentation>Korea (South), Won</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KWD">
+						<xsd:annotation>
+							<xsd:documentation>Kuwait, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KYD">
+						<xsd:annotation>
+							<xsd:documentation>Cayman Islands, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="KZT">
+						<xsd:annotation>
+							<xsd:documentation>Kazakhstan, Tenge</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LAK">
+						<xsd:annotation>
+							<xsd:documentation>Laos, Kips</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LBP">
+						<xsd:annotation>
+							<xsd:documentation>Lebanon, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LKR">
+						<xsd:annotation>
+							<xsd:documentation>Sri Lanka, Rupees</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LRD">
+						<xsd:annotation>
+							<xsd:documentation>Liberia, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LSL">
+						<xsd:annotation>
+							<xsd:documentation>Lesotho, Maloti</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LTL">
+						<xsd:annotation>
+							<xsd:documentation>Lithuania, Litai</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LVL">
+						<xsd:annotation>
+							<xsd:documentation>Latvia, Lati</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="LYD">
+						<xsd:annotation>
+							<xsd:documentation>Libya, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MAD">
+						<xsd:annotation>
+							<xsd:documentation>Morocco, Dirhams</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MDL">
+						<xsd:annotation>
+							<xsd:documentation>Moldova, Lei</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MGA">
+						<xsd:annotation>
+							<xsd:documentation>Madagascar, Ariary</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MKD">
+						<xsd:annotation>
+							<xsd:documentation>Macedonia, Denars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MMK">
+						<xsd:annotation>
+							<xsd:documentation>Myanmar (Burma), Kyats</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MNT">
+						<xsd:annotation>
+							<xsd:documentation>Mongolia, Tugriks</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MOP">
+						<xsd:annotation>
+							<xsd:documentation>Macau, Patacas</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MRO">
+						<xsd:annotation>
+							<xsd:documentation>Mauritania, Ouguiyas</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MTL">
+						<xsd:annotation>
+							<xsd:documentation>Malta, Liri (expires 2008-Jan-31)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MUR">
+						<xsd:annotation>
+							<xsd:documentation>Mauritius, Rupees</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MVR">
+						<xsd:annotation>
+							<xsd:documentation>Maldives (Maldive Islands), Rufiyaa</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MWK">
+						<xsd:annotation>
+							<xsd:documentation>Malawi, Kwachas</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MXN">
+						<xsd:annotation>
+							<xsd:documentation>Mexico, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MYR">
+						<xsd:annotation>
+							<xsd:documentation>Malaysia, Ringgits</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="MZN">
+						<xsd:annotation>
+							<xsd:documentation>Mozambique, Meticais</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="NAD">
+						<xsd:annotation>
+							<xsd:documentation>Namibia, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="NGN">
+						<xsd:annotation>
+							<xsd:documentation>Nigeria, Nairas</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="NIO">
+						<xsd:annotation>
+							<xsd:documentation>Nicaragua, Cordobas</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="NOK">
+						<xsd:annotation>
+							<xsd:documentation>Norway, Krone</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="NPR">
+						<xsd:annotation>
+							<xsd:documentation>Nepal, Nepal Rupees</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="NZD">
+						<xsd:annotation>
+							<xsd:documentation>New Zealand, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="OMR">
+						<xsd:annotation>
+							<xsd:documentation>Oman, Rials</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PAB">
+						<xsd:annotation>
+							<xsd:documentation>Panama, Balboa</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PEN">
+						<xsd:annotation>
+							<xsd:documentation>Peru, Nuevos Soles</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PGK">
+						<xsd:annotation>
+							<xsd:documentation>Papua New Guinea, Kina</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PHP">
+						<xsd:annotation>
+							<xsd:documentation>Philippines, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PKR">
+						<xsd:annotation>
+							<xsd:documentation>Pakistan, Rupees</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PLN">
+						<xsd:annotation>
+							<xsd:documentation>Poland, Zlotych</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="PYG">
+						<xsd:annotation>
+							<xsd:documentation>Paraguay, Guarani</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="QAR">
+						<xsd:annotation>
+							<xsd:documentation>Qatar, Rials</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="RON">
+						<xsd:annotation>
+							<xsd:documentation>Romania, New Lei</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="RSD">
+						<xsd:annotation>
+							<xsd:documentation>Serbia, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="RUB">
+						<xsd:annotation>
+							<xsd:documentation>Russia, Rubles</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="RWF">
+						<xsd:annotation>
+							<xsd:documentation>Rwanda, Rwanda Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SAR">
+						<xsd:annotation>
+							<xsd:documentation>Saudi Arabia, Riyals</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SBD">
+						<xsd:annotation>
+							<xsd:documentation>Solomon Islands, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SCR">
+						<xsd:annotation>
+							<xsd:documentation>Seychelles, Rupees</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SDG">
+						<xsd:annotation>
+							<xsd:documentation>Sudan, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SEK">
+						<xsd:annotation>
+							<xsd:documentation>Sweden, Kronor</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SGD">
+						<xsd:annotation>
+							<xsd:documentation>Singapore, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SHP">
+						<xsd:annotation>
+							<xsd:documentation>Saint Helena, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SLL">
+						<xsd:annotation>
+							<xsd:documentation>Sierra Leone, Leones</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SOS">
+						<xsd:annotation>
+							<xsd:documentation>Somalia, Shillings</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SPL">
+						<xsd:annotation>
+							<xsd:documentation>Seborga, Luigini</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SRD">
+						<xsd:annotation>
+							<xsd:documentation>Suriname, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="STD">
+						<xsd:annotation>
+							<xsd:documentation>São Tome and Principe, Dobras</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SVC">
+						<xsd:annotation>
+							<xsd:documentation>El Salvador, Colones</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SYP">
+						<xsd:annotation>
+							<xsd:documentation>Syria, Pounds</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="SZL">
+						<xsd:annotation>
+							<xsd:documentation>Swaziland, Emalangeni</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="THB">
+						<xsd:annotation>
+							<xsd:documentation>Thailand, Baht</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TJS">
+						<xsd:annotation>
+							<xsd:documentation>Tajikistan, Somoni</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TMM">
+						<xsd:annotation>
+							<xsd:documentation>Turkmenistan, Manats</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TND">
+						<xsd:annotation>
+							<xsd:documentation>Tunisia, Dinars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TOP">
+						<xsd:annotation>
+							<xsd:documentation>Tonga, Pa'anga</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TRY">
+						<xsd:annotation>
+							<xsd:documentation>Turkey, New Lira</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TTD">
+						<xsd:annotation>
+							<xsd:documentation>Trinidad and Tobago, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TVD">
+						<xsd:annotation>
+							<xsd:documentation>Tuvalu, Tuvalu Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TWD">
+						<xsd:annotation>
+							<xsd:documentation>Taiwan, New Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="TZS">
+						<xsd:annotation>
+							<xsd:documentation>Tanzania, Shillings</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="UAH">
+						<xsd:annotation>
+							<xsd:documentation>Ukraine, Hryvnia</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="UGX">
+						<xsd:annotation>
+							<xsd:documentation>Uganda, Shillings</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="USD">
+						<xsd:annotation>
+							<xsd:documentation>United States of America, Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="UYU">
+						<xsd:annotation>
+							<xsd:documentation>Uruguay, Pesos</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="UZS">
+						<xsd:annotation>
+							<xsd:documentation>Uzbekistan, Sums</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="VEB">
+						<xsd:annotation>
+							<xsd:documentation>Venezuela, Bolivares (expires 2008-Jun-30)</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="VEF">
+						<xsd:annotation>
+							<xsd:documentation>Venezuela, Bolivares Fuertes	</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="VND">
+						<xsd:annotation>
+							<xsd:documentation>Viet Nam, Dong</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="VUV">
+						<xsd:annotation>
+							<xsd:documentation>Vanuatu, Vatu</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="WST">
+						<xsd:annotation>
+							<xsd:documentation>Samoa, Tala</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XAF">
+						<xsd:annotation>
+							<xsd:documentation>Communauté Financière Africaine BEAC, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XAG">
+						<xsd:annotation>
+							<xsd:documentation>Silver, Ounces</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XAU">
+						<xsd:annotation>
+							<xsd:documentation>Gold, Ounces</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XCD">
+						<xsd:annotation>
+							<xsd:documentation>East Caribbean Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XDR">
+						<xsd:annotation>
+							<xsd:documentation>International Monetary Fund (IMF) Special Drawing Rights</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XOF">
+						<xsd:annotation>
+							<xsd:documentation>Communauté Financière Africaine BCEAO, Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XPD">
+						<xsd:annotation>
+							<xsd:documentation>Palladium Ounces</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XPF">
+						<xsd:annotation>
+							<xsd:documentation>Comptoirs Français du Pacifique Francs</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="XPT">
+						<xsd:annotation>
+							<xsd:documentation>Platinum, Ounces</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="YER">
+						<xsd:annotation>
+							<xsd:documentation>Yemen, Rials</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ZAR">
+						<xsd:annotation>
+							<xsd:documentation>South Africa, Rand</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ZMK">
+						<xsd:annotation>
+							<xsd:documentation>Zambia, Kwacha</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+					<xsd:enumeration value="ZWD">
+						<xsd:annotation>
+							<xsd:documentation>Zimbabwe, Zimbabwe Dollars</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- OfferAmountType.xsd -->
+
+
+			<xsd:complexType name="OfferAmountType">
+				<xsd:annotation>
+					<xsd:documentation>represents eCheck offer amount</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="offerType" type="OfferAmountEnumType">
+						<xsd:annotation>
+							<xsd:documentation>offer type</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="amount" type="xsd:float">
+						<xsd:annotation>
+							<xsd:documentation>amount</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="currencyCode" type="CurrencyEnumType">
+						<xsd:annotation>
+							<xsd:documentation>currency code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- OfferAmountEnumType.xsd -->
+
+			<xsd:simpleType name="OfferAmountEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="TKT" />
+					<xsd:enumeration value="FEE" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- CreditCardEnumType.xsd -->
+
+			<xsd:simpleType name="CreditCardEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="VISA" />
+					<xsd:enumeration value="MASTER_CARD" />
+					<xsd:enumeration value="DISCOVER" />
+					<xsd:enumeration value="AMEX" />
+					<xsd:enumeration value="AMERICAN_AIRLINES" />
+					<xsd:enumeration value="CARTE_BLANCHE" />
+					<xsd:enumeration value="DINERS" />
+					<xsd:enumeration value="JCB" />
+					<xsd:enumeration value="UATP" />
+					<xsd:enumeration value="BARTER_CARD" />
+					<xsd:enumeration value="PIN_DEBIT" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- CurrencyCodeType.xsd -->
+
+			<xsd:simpleType name="CurrencyCodeType">
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="[A-Z]{3}" />
+				</xsd:restriction>
+			</xsd:simpleType>
+			<!-- CreditCardType.xsd -->
+
+
+			<xsd:complexType name="CreditCardType">
+				<xsd:sequence>
+					<xsd:element name="cardType" type="CreditCardEnumType">
+						<xsd:annotation>
+							<xsd:documentation>Card type example VISA, MASTERCARD, AMEX, etc.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="cardNumber" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Card number of the Credit Card</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="cardVerificationValue" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Card verification value should be passed as String</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="expirationMonth" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>Expiration year of the Credit Card.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="expirationYear" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>Expiration year of the Credit Card.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="track2Data" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Card track 2 data.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="uATPCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>UATP code, applies only to UATP cards.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="nameOnCard" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Name on the Credit Card.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- EcheckType.xsd -->
+
+			<xsd:complexType name="EcheckType">
+				<xsd:annotation>
+					<xsd:documentation>represents eCheck information</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="accountNumber" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>account number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="routingNumber" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>routing number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="bankName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>bank name</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="personalChecking" type="xsd:boolean">
+						<xsd:annotation>
+							<xsd:documentation>personal checking indicator</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="personalSavings" type="xsd:boolean">
+						<xsd:annotation>
+							<xsd:documentation>personal saving indicator</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="businessChecking" type="xsd:boolean">
+						<xsd:annotation>
+							<xsd:documentation>business checking indicator</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="businessSavings" type="xsd:boolean">
+						<xsd:annotation>
+							<xsd:documentation>business savings indicator</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="businessName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>business name</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="businessTaxIDNumber" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>business tax ID number</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="description" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>description</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- ctCommonPayment.xsd -->
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://cs.ct.aa/payment"
+			version="1.1" xmlns="http://cs.ct.aa/payment" xmlns:airline="http://payment.common.ct.aa/airline" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:datasource="http://payment.common.ct.aa/datasource" xmlns:fault="http://payment.common.ct.aa/fault"
+			xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:utility="http://payment.common.ct.aa/utility" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://payment.common.ct.aa/airline" />
+			<xsd:import namespace="http://payment.common.ct.aa/datasource" />
+			<xsd:import namespace="http://payment.common.ct.aa/generic" />
+			<xsd:import namespace="http://payment.common.ct.aa/location" />
+			<xsd:import namespace="http://payment.common.ct.aa/operation/header" />
+			<xsd:import namespace="http://payment.common.ct.aa/payment" />
+			<xsd:import namespace="http://payment.common.ct.aa/utility" />
+			<!-- FeeLookupTableEnumType.xsd -->
+
+			<xsd:simpleType name="FeeLookupTableEnumType">
+				<xsd:annotation>
+					<xsd:documentation>Enumeration of supported Fee tables for fee lookups</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="MISC">
+						<xsd:annotation>
+							<xsd:documentation>MISC TABLE</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="MIXB">
+						<xsd:annotation>
+							<xsd:documentation>MIXB TABLE</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="STK/PRICE">
+						<xsd:annotation>
+							<xsd:documentation>AADV UPG TABLE</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- CloseATACRequest.xsd -->
+
+
+			<xsd:element name="CloseATACRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="userProfileRequest" type="datasource:UserProfileRequestType">
+							<xsd:annotation>
+								<xsd:documentation>Setting the UserProfile settings.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- CurrencyRateRequestType.xsd -->
+
+
+			<xsd:complexType name="CurrencyRateRequestType">
+				<xsd:annotation>
+					<xsd:documentation>Represents a currency rate request.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="fromCurrencyCode" type="payment:CurrencyCodeType">
+						<xsd:annotation>
+							<xsd:documentation>
+								From currency. Currently supports USD, CAD and GBP.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="toCurrencyCode" type="payment:CurrencyCodeType">
+						<xsd:annotation>
+							<xsd:documentation>
+								To currency. If not supplied, all exchange rates for the given fromCurrency are returned.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="rateTable" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Rate table to be used. Currently supports BSR, ROE, BBR, and ICH (only for US). If not supplied all rate tables are
+								used.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- DaysType.xsd -->
+
+
+			<xsd:complexType name="DaysType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="day" type="utility:DayOfWeekEnumType" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- ProductFeeType.xsd -->
+
+			<xsd:complexType name="ProductFeeType">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="feeAmount" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Return a fee amount looked up from the Sabre MIXB, MISC or AADV_UPG table
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="feeName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								fee name from the MIXB, MISC or AADV_UPG table
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="feeItemId" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Item id used to distinguish fees that have multiple entries for the same fee name.
+								For CHECKED BAG FEE, id should be two characters, the SSR id letter and the bag number digit.
+								Valid ids are:
+								MIXB table fee name : ID
+								SSR CKBA - BAG 1 : A1
+								SSR CKBA - BAG 2 : A2
+								SSR CKBB - BAG 1 : B1
+								SSR CKBB - BAG 2 : B2
+								SSR CKBC - BAG 1 : C1
+								SSR CKBC - BAG 2 : C2
+								SSR CKBD - BAG 1 : D1
+								SSR CKBD - BAG 2 : D2
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="feeOrigin" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Origin country code used to determine which fee to return
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="feeDestination" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Destination country code used to determine which fee to return
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="feeLookupTable" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Supported Fee table for fee lookups
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- LookupMultiProductFeeRequest.xsd -->
+
+
+
+			<xsd:element name="LookupMultiProductFeeRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard request header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="originCountryCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Origin Country Code example US, UK, etc to be specified</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" name="destinationCountryCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>This is optional for AACOM while SSM would need this
+									to populate data from MIXB or MISC table
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element minOccurs="0" name="aaaCity" type="airline:AirportCodeType">
+							<xsd:annotation>
+								<xsd:documentation>Saber AAA City</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element minOccurs="0" name="destinationAirportCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Destination Airport Code to be specified</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="1" name="feeLookupTable" type="FeeLookupTableEnumType">
+							<xsd:annotation>
+								<xsd:documentation>FeeLookupTable to be chosen from the Enum type</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="userProfileRequest" type="datasource:UserProfileRequestType">
+							<xsd:annotation>
+								<xsd:documentation>The UserProfile containing airportCode and pseudoCityStation.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element maxOccurs="1" minOccurs="1" name="feeLookups" type="FeeLookupsType" />
+					</xsd:sequence>
+				</xsd:complexType>
+
+			</xsd:element>
+
+			<!-- LookupPromoTableResponse.xsd -->
+
+
+
+			<xsd:element name="LookupPromoTableResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard response header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="promoTables" type="PromoTablesType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- PromoTablesType.xsd -->
+
+
+			<xsd:complexType name="PromoTablesType">
+				<xsd:annotation>
+					<xsd:documentation>List of Promo tables.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="promoTable" type="PromoTableType" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- FeeLookupType.xsd -->
+
+			<xsd:complexType name="FeeLookupType">
+				<xsd:sequence>
+					<xsd:element name="feeName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Following quoted strings are currently supported:
+								"EXCESS/ PIECES 1-3" (MIXB table)
+								"CHECKED BAGGAGE FEE" (MIXB table)
+								"OVERWEIGHT 51-70L" (MIXB table)
+								"OVERWEIGHT 71-100L" (MIXB table)
+								"SSK" (STK/PRICE table)
+								"SAME-DAY FLT CHANGE" (MISC table)
+								"CA SAME-DAY FLT CHG" (MISC table)
+								"PAID GRP 1 BOARDING" (MISC table)
+								"EXCESS/WITHIN SIZE/WT" (MIXB Table)
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="feeItemId" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Must be populated with one of the values from a string</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- PayerNameType.xsd -->
+
+			<xsd:complexType name="PayerName">
+				<xsd:sequence>
+					<xsd:element name="FirstName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>First name of the Payer</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="MiddleName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Middle name of the Payer</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="LastName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Last name of the Payer</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- ProductFeesType.xsd -->
+
+
+			<xsd:complexType name="ProductFeesType">
+				<xsd:annotation>
+					<xsd:documentation>List of ASA Values for a specific airport code.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="productFee" type="ProductFeeType" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- LookupMultiProductFeeResponse.xsd -->
+
+
+
+
+			<xsd:element name="LookupMultiProductFeeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard response header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="productFees" type="ProductFeesType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- ProductTaxType.xsd -->
+
+
+			<xsd:complexType name="ProductTaxType">
+				<xsd:annotation>
+					<xsd:documentation>Represents taxes for the specified Product.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="prodTaxType" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Possible values are GENERIC_FEE_TAX,CANADA_TRANSPORT_TAX
+								CANADA_GOODS_AND_SERVICES_TAX,CANADA_HARMONIZED_SALES_TAX
+								QUEBEC_GOODS_AND_SERVICES_TAX,GB_APD,EU_SOLIDARITY_TAX,
+								For All Other countries Pass Two Letter Country Code . Ex:IN for India
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="taxAmount" type="xsd:double">
+						<xsd:annotation>
+							<xsd:documentation>
+								The amount of the tax.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="currency" type="payment:CurrencyEnumType">
+						<xsd:annotation>
+							<xsd:documentation>
+								The currency type of the fee product.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- GetExpressCheckoutDetailsResponse.xsd -->
+
+
+
+			<xsd:element name="GetExpressCheckoutDetailsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+
+						<xsd:element minOccurs="0" name="sessionToken" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The timestamped token value that was returned by SetExpressCheckoutResponse and passed on
+									GetExpressCheckoutDetailsRequest.
+									<br />
+									<br />
+									Character length and limitations: 20 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="payerID" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Unique customer ID
+									<br />
+									Character length and limitations: 17 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="payer" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Email address of payer
+									<br />
+									Character length and limitations: 127 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="payerName" type="PayerName">
+							<xsd:annotation>
+								<xsd:documentation>Name of payer </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="payerBillingAddress" type="PayerAddress">
+							<xsd:annotation>
+								<xsd:documentation>
+									Customer's billing address.
+									<br />
+									<br />
+									Optional
+									<br />
+									<br />
+									If you have credit card mapped in your account then billing address of the credit card is returned otherwise
+									your primary address is returned , PayPal returns this address in GetExpressCheckoutDetailsResponse.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="paypalResponseTime" type="xsd:long">
+							<xsd:annotation>
+								<xsd:documentation>Response time in ms for Paypal Transaction</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- PingResponse.xsd -->
+
+
+			<xsd:element name="PingResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>The status if the request, if no data available</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="paypalResponseTime" type="xsd:long">
+							<xsd:annotation>
+								<xsd:documentation>Response time in ms for Paypal Transaction</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="echeckResponseTime" type="xsd:long">
+							<xsd:annotation>
+								<xsd:documentation>Response time in ms for ECheck Transaction</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- ProcessProductFeeVoidRequest.xsd -->
+
+
+			<xsd:element name="ProcessProductFeeVoidRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard request header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="ticketNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Ticket number assosciated with the PNR.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="locatorCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The recordLocator of the Reservation.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="userProfileRequest" type="datasource:UserProfileRequestType">
+							<xsd:annotation>
+								<xsd:documentation>The UserProfile containing airportCode and pseudoCityStation.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+
+			</xsd:element>
+
+			<!-- CloseC20Request.xsd -->
+
+
+			<xsd:element name="CloseC20Request">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="userProfileRequest" type="datasource:UserProfileRequestType">
+							<xsd:annotation>
+								<xsd:documentation>Setting the UserProfile settings.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="closeDate" type="xsd:date">
+							<xsd:annotation>
+								<xsd:documentation>Close Date</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- FullFaresType.xsd -->
+
+			<xsd:complexType name="FullFaresType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="fullFare" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- SetExpressCheckoutResponse.xsd -->
+
+
+			<xsd:element name="SetExpressCheckoutResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element minOccurs="0" name="token" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A timestamped token by which you
+									identify to PayPal that you are processing this payment with Express
+									Checkout.
+									The token expires after three hours. If you set Token in the
+									SetExpressCheckoutRequest, the value of Token in the response
+									is identical to the value in the request.
+									<br />
+									<br />
+									Character length and limitations: 20 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="paypalResponseTime" type="xsd:long">
+							<xsd:annotation>
+								<xsd:documentation>Response time in ms for Paypal Transaction</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- DoUATPExpressCheckoutPaymentResponse.xsd -->
+
+
+			<xsd:element name="DoUATPExpressCheckoutPaymentResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element minOccurs="0" name="sessionToken" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The timestamped token value that was returned by SetExpressCheckoutResponse and passed on
+									DoUATPExpressCheckoutPaymentRequest.
+									<br />
+									Character length and limitations: 20 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="TransactionID" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A transaction identification number. Required for voiding the transaction
+									<br />
+									Character length and limits: 19 single-byte characters maximum
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="PaymentStatus" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The status of the payment. Usually it is PENDING for Order type of Payment
+									<br />
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="PendingReason" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Reason For Pending.
+									<br />
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="UATPNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>UATP Number returned form Paypal. The Encryption is being done for this content using
+									WS-Security. The UATP number starts with 1112 for AA merchant accounts.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="UATPExpMonth" type="xsd:int">
+							<xsd:annotation>
+								<xsd:documentation>The Month is usually the current Month. 1 based Month index.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="UATPExpYear" type="xsd:int">
+							<xsd:annotation>
+								<xsd:documentation>Four digit year. Usually 3 years from now.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="paypalResponseTime" type="xsd:long">
+							<xsd:annotation>
+								<xsd:documentation>Response time in ms for Paypal Transaction</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- GetCurrencyExchangeRateRequest.xsd -->
+
+
+
+
+			<xsd:element name="GetCurrencyExchangeRateRequest">
+				<xsd:annotation>
+					<xsd:documentation>
+						Request for retrieving specified currency rates.
+					</xsd:documentation>
+				</xsd:annotation>
+
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" name="currencyRateRequest" type="CurrencyRateRequestType">
+							<xsd:annotation>
+								<xsd:documentation>
+									Currency rate request(s).
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- ProcessProductFeeVoidResponse.xsd -->
+
+
+			<xsd:element name="ProcessProductFeeVoidResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard response header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="creditCardVoided" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>boolean indicator indicating if the credit card in the request was voided.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- CurrencyRateResponseType.xsd -->
+
+
+			<xsd:complexType name="CurrencyRateResponseType">
+				<xsd:annotation>
+					<xsd:documentation>Represents a currency rate request.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element name="fromCurrencyCode" type="payment:CurrencyCodeType">
+						<xsd:annotation>
+							<xsd:documentation>
+								From currency. Currently supports USD, CAD and GBP.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="toCountryName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Country name.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="toCurrencyName" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Currency name.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="toCurrencyCode" type="payment:CurrencyCodeType">
+						<xsd:annotation>
+							<xsd:documentation>
+								To currency.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="decimals" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>
+								Number of decimal places to use.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="rate" type="xsd:double">
+						<xsd:annotation>
+							<xsd:documentation>
+								Currency exchange rate.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="rateTable" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>
+								Rate table used.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- LookupPromoTableRequest.xsd -->
+
+
+			<xsd:element name="LookupPromoTableRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard request header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- ProcessProductFeeResponse.xsd -->
+
+
+
+			<xsd:element name="ProcessProductFeeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element maxOccurs="1" minOccurs="0" name="receiptNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The Receipt Number for the successful CC payment.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="checkDigit" type="xsd:int">
+							<xsd:annotation>
+								<xsd:documentation>The Check digit for the successful CC payment.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" ref="taxes">
+							<xsd:annotation>
+								<xsd:documentation>Taxes to be included for the process Product Payments.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="errorType" type="ProductErrorType">
+							<xsd:annotation>
+								<xsd:documentation>Product Error Type.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="taxes">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="3" minOccurs="1" ref="TaxItem" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element name="TaxItem">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="1" minOccurs="1" name="taxCode" type="xsd:string" />
+						<xsd:element maxOccurs="1" minOccurs="1" name="amount" type="xsd:double" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+
+			<!-- GetExpressCheckoutDetailsRequest.xsd -->
+
+
+			<xsd:element name="GetExpressCheckoutDetailsRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="sessionToken" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A timestamped token, the value of which was returned by SetExpressCheckoutResponse.
+									<br />
+									<br />
+									Character length and limitations: 20 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="currency" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The same currency code which was given in SetExpressCheckOut Request.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- FeeProductType.xsd -->
+
+
+			<xsd:complexType name="FeeProductType">
+				<xsd:annotation>
+					<xsd:documentation>Represents a checked bag fee or PetC product.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="1" minOccurs="1" name="feeProdType" type="FeeProductEnumType">
+						<xsd:annotation>
+							<xsd:documentation>
+								Fee product description.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="quantity" type="xsd:int">
+						<xsd:annotation>
+							<xsd:documentation>
+								The number of fee products of this type being
+								purchased.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="unitCost" type="xsd:double">
+						<xsd:annotation>
+							<xsd:documentation>
+								The cost for each of the fee product of this
+								type.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="currency" type="payment:CurrencyEnumType">
+						<xsd:annotation>
+							<xsd:documentation>
+								The currency type of the fee product.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="taxes" type="ProductTaxType">
+						<xsd:annotation>
+							<xsd:documentation>
+								The taxes for the fee product.
+							</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ProcessCertificateResponse.xsd -->
+
+
+			<xsd:element name="ProcessCertificateResponse">
+				<xsd:annotation>
+					<xsd:documentation>
+						Response for the activation/deactivation of electronic certificates.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard response header indicating success or failure.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="authorizationNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Authorization number for processing Certificate.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- PromoTableType.xsd -->
+
+
+			<xsd:complexType name="PromoTableType">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" name="name" type="xsd:string" />
+					<xsd:element minOccurs="0" name="carrier" type="xsd:string" />
+					<xsd:element minOccurs="0" name="origin" type="xsd:string" />
+					<xsd:element minOccurs="0" name="destination" type="xsd:string" />
+					<xsd:element minOccurs="0" name="flightNumber" type="xsd:string" />
+					<xsd:element minOccurs="0" name="country" type="xsd:string" />
+					<xsd:element minOccurs="0" name="state" type="xsd:string" />
+					<xsd:element minOccurs="0" name="memberStatus" type="xsd:string" />
+					<xsd:element minOccurs="0" name="effectiveDate" type="xsd:dateTime" />
+					<xsd:element minOccurs="0" name="expirationDate" type="xsd:dateTime" />
+					<xsd:element minOccurs="0" name="days" type="DaysType" />
+					<xsd:element minOccurs="0" name="upgradeCount" type="xsd:int" />
+					<xsd:element minOccurs="0" name="upgradeCountPercentage" type="xsd:boolean" />
+					<xsd:element minOccurs="0" name="minMiles" type="xsd:int" />
+					<xsd:element minOccurs="0" name="maxMiles" type="xsd:int" />
+					<xsd:element minOccurs="0" name="percentOfUpgrades" type="xsd:int" />
+					<xsd:element minOccurs="0" name="fullFares" type="FullFaresType" />
+					<xsd:element minOccurs="0" name="fullExcludedFares" type="FullExcludedFaresType" />
+					<xsd:element minOccurs="0" name="startFares" type="StartFaresType" />
+					<xsd:element minOccurs="0" name="startExcludedFares" type="StartExcludedFaresType" />
+					<xsd:element minOccurs="0" name="companion" type="xsd:boolean" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- ECheckProcessOfferRequest.xsd -->
+
+
+			<xsd:element name="ECheckProcessOfferRequest">
+				<xsd:annotation>
+					<xsd:documentation>
+						Request to authorizeEcheck service.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="eCheck" type="payment:EcheckType">
+							<xsd:annotation>
+								<xsd:documentation>echeck info</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="checkPaymentType" type="payment:CheckPaymentType">
+							<xsd:annotation>
+								<xsd:documentation>Holds the payment information for a flight reservation.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="addressType" type="location:AddressType">
+							<xsd:annotation>
+								<xsd:documentation>Holds the address information for echeck.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="personType" type="generic:PersonType">
+							<xsd:annotation>
+								<xsd:documentation>Holds the person information for echeck.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- DoUATPExpressCheckoutPaymentRequest.xsd -->
+
+
+			<xsd:element name="DoUATPExpressCheckoutPaymentRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="sessionToken" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A time stamped token, the value of which was returned by SetExpressCheckoutResponse.
+									<br />
+									<br />
+									Character length and limitations: 20 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="payerID" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Encrypted PayPal customer account identification number as returned by GetExpressCheckoutDetailsResponse.
+									<br />
+									Character length and limitations: 127 single-byte characters.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="currencyCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The same curency code which was given in SetExpressCheckOut Request.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="orderTotal" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The total order amount. Can be different from the one sent in the SetExpressCheckoutRequest.
+									<br />
+									Limitations: Must not exceed $10,000 USD in any currency. No currency symbol. Decimal separator must be a
+									period (.), and the thousands separator must be a comma (,).
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- CardValidationResponse.xsd -->
+
+			<xsd:element name="CardValidationResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element default="false" name="valid" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation> Boolean that signals the validity of the Card Validation.
+									This would also return true for all the Credit Cards besides VISA, MC and AMEX.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="remark" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation> These are the actual remarks (if any) returned by the validation. </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- CertificateActionType.xsd -->
+
+			<xsd:simpleType name="CertificateActionType">
+				<xsd:annotation>
+					<xsd:documentation>
+						A list of possible certificate actions.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="ACTIVATE" />
+					<xsd:enumeration value="RESET" />
+					<xsd:enumeration value="USE" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- FeeLookupsType.xsd -->
+
+
+			<xsd:complexType name="FeeLookupsType">
+				<xsd:annotation>
+					<xsd:documentation>List of ASA Values for a specific airport code.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="feeLookup" type="FeeLookupType" />
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- ProcessCertificateRequest.xsd -->
+
+
+
+
+			<xsd:element name="ProcessCertificateRequest">
+				<xsd:annotation>
+					<xsd:documentation>
+						Request for the activation/deactivation of electronic certificates.
+						Note that certificationAction, formNumber, and startingCertificateNumber
+						must be always be populated, while endingCertificateNumber, expirationDate,
+						and password must be populated for only the activate and reset actions.
+					</xsd:documentation>
+				</xsd:annotation>
+
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="startingCertificateNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The starting Certificate Number
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="endingCertificateNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The Ending Certificate Number
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="expirationDate" type="xsd:dateTime">
+							<xsd:annotation>
+								<xsd:documentation>
+									The expiration date of the certificate
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="formNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The Form Number
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="password" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The Password required for Activation of Certificates
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="certificateAction" type="CertificateActionType">
+							<xsd:annotation>
+								<xsd:documentation>
+									The Certificate Action Type
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- SetExpressCheckoutRequest.xsd -->
+
+
+			<xsd:element name="SetExpressCheckoutRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element minOccurs="0" name="sessionToken" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									On your first invocation of SetExpressCheckoutRequest, the value of this token is returned by
+									SetExpressCheckoutResponse.
+									<br />
+									<br />
+									Optional
+									<br />
+									<br />
+									Include this element and its value only if you want to modify an existing checkout session with another
+									invocation of SetExpressCheckoutRequest; for example, if you want the customer to edit his shipping address on
+									PayPal.
+									<br />
+									<br />
+									Character length and limitations: 20 single-byte characters
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="returnURL" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									URL to which the customer's browser is returned after choosing to pay with PayPal. PayPal recommends that the
+									value of ReturnURL be the final review page on which the customer confirms the order and payment.
+									<br />
+									<br />
+									Character length and limitations: no limit.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="cancelURL" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									URL to which the customer is returned if he does not approve the use of PayPal to pay you. PayPal recommends
+									that the value of CancelURL be the original page on which the customer chose to pay with PayPal.
+									<br />
+									<br />
+									Character length and limitations: no limit
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="orderTotal" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The estimated total cost of the order to the customer. If shipping cost and tax charges are known, include them
+									in OrderTotal; if not, OrderTotal should be the current sub-total of the order.
+									<br />
+									<br />
+									Limitations: Must not exceed $10,000 USD in any currency. No currency symbol. Decimal separator must be a
+									period (.), and the thousands separator must be a comma (,).
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="locale" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Locale of pages displayed by PayPal during Express Checkout. It is the two-character country
+									code for any of the supported PayPal locales. US for English and ES for Spanish.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="currency" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The curency code is the three-character currency code for any of the supported PayPal
+									currencies. Currently using only USD, CAD, GBP
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="image" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A URL for the image you want to appear at the top left of the payment page. The image has a maximum size of 750
+									pixels wide by 90 pixels high. PayPal recommends that you provide an image that is stored on a secure (https)
+									server.
+									<br />
+									<br />
+									Character length and limitations: 127
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- PayerAddressType.xsd -->
+
+			<xsd:complexType name="PayerAddress">
+				<xsd:sequence>
+					<xsd:element name="name" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>It is the name of the Payer as in Paypal Account</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="Line1" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Address on Line 1</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element minOccurs="0" name="Line2" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Address on Line 2</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="City" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>City name of the address</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="StateOrProvince" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>It is 2 letter code for US and name for other countries</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="Country" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>It is standard 2-letter ISO 3166 country code</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element name="PostalCode" type="xsd:string">
+						<xsd:annotation>
+							<xsd:documentation>Postal Code/ Zip Code of the address</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<!-- LookupProductFeeResponse.xsd -->
+
+
+
+
+			<xsd:element name="LookupProductFeeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard response header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="productFee" type="ProductFeeType" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- StartFaresType.xsd -->
+
+			<xsd:complexType name="StartFaresType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="startFare" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- ProcessProductFeeRequest.xsd -->
+
+
+
+			<xsd:element name="ProcessProductFeeRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="userProfileRequest" type="datasource:UserProfileRequestType">
+							<xsd:annotation>
+								<xsd:documentation>Setting the UserProfile settings.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="recordLocator" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>PNR/record Locator of the reservation.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="firstName" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>First Name of the Traveler.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="lastName" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Last Name of the Traveler.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element ref="ticketNumbersArray" />
+
+						<xsd:element name="passengerPNRId" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The Passenger PnrId.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="passengerType" type="airline:PassengerEnumType">
+							<xsd:annotation>
+								<xsd:documentation>
+									Type of Passenger.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="aAdvantageNumber" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									AAdvantage Number.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="creditCard" type="payment:CreditCardType">
+							<xsd:annotation>
+								<xsd:documentation>
+									Credit Card Information associated with this request.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="Product" type="FeeProductType">
+							<xsd:annotation>
+								<xsd:documentation>
+									Different kinds of Product Fees.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element default="false" name="validateCreditCard" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>
+									Set this boolean if Credit Card validation is desired.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="approvalCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Approval code for credit card amount if pre-approved.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+
+			<xsd:element name="ticketNumbersArray">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element maxOccurs="unbounded" name="ticket" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									String array fo ticket numbers.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- ECheckProcessOfferResponse.xsd -->
+
+
+			<xsd:element name="ECheckProcessOfferResponse">
+				<xsd:annotation>
+					<xsd:documentation>
+						Response from authorizeEcheck service.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element minOccurs="0" name="billingControlNumber" type="xsd:long">
+							<xsd:annotation>
+								<xsd:documentation>Billing control number for ECheck</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element minOccurs="0" name="errorCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Response error code for ECheck
+									<br />
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="errorMessage" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Response error message for ECheck
+									<br />
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="transactionSuccessful" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>Flag indicating is the transaction was a success or failure .
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="applicationError" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>Flag indicating is an application Error occurred during ECheck.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="systemError" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation>Flag indicating is a system Error occurred during ECheck.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- GetCurrencyExchangeRateResponse.xsd -->
+
+
+			<xsd:element name="GetCurrencyExchangeRateResponse">
+				<xsd:annotation>
+					<xsd:documentation>
+						Response for the currency rate(s) that were requested.
+					</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard response header indicating success or failure.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="currencyRate" type="CurrencyRateResponseType">
+							<xsd:annotation>
+								<xsd:documentation>
+									Currency exchange rate(s).
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- CardValidationRequest.xsd -->
+
+
+			<xsd:element name="CardValidationRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType" />
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="creditCardInfo" type="payment:CreditCardType">
+							<xsd:annotation>
+								<xsd:documentation>Credit Card Information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- FeeProductEnumType.xsd -->
+			<xsd:simpleType name="FeeProductEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="LOAD_FACTOR_BASED_UPGRADE">
+						<xsd:annotation>
+							<xsd:documentation>Host value (2) -- Load Factor Based Upgrade Fee</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="CONFIRMED_STANDBY_FEE">
+						<xsd:annotation>
+							<xsd:documentation> Host value (3) -- Confirmed Standby Fee</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="UPGRADE_FEE">
+						<xsd:annotation>
+							<xsd:documentation>Host Value (5) -- Upgrade Fee</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="PETC_FEE">
+						<xsd:annotation>
+							<xsd:documentation>Host Value (7) -- PetC Fee</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="GROUP_ONE_BOARDING">
+						<xsd:annotation>
+							<xsd:documentation>Host Value (8) -- Group One Boarding</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+					<xsd:enumeration value="EXPRESS_SEATS">
+						<xsd:annotation>
+							<xsd:documentation>Host Value (9) -- Express Seats</xsd:documentation>
+						</xsd:annotation>
+					</xsd:enumeration>
+				</xsd:restriction>
+			</xsd:simpleType>
+			<!-- LookupProductFeeRequest.xsd -->
+
+
+
+
+			<xsd:element name="LookupProductFeeRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="requestHeader" type="header:RequestHeaderType">
+							<xsd:annotation>
+								<xsd:documentation>Standard request header.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="bookingEngineInfo" type="datasource:BookingEngineInfoType">
+							<xsd:annotation>
+								<xsd:documentation>Booking engine information.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="originCountryCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Origin Country Code example US, UK, etc to be specified</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element minOccurs="0" name="destinationCountryCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>This is optional for AACOM while SSM would need this
+									to populate data from MIXB or MISC table
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element minOccurs="0" name="aaaCity" type="airline:AirportCodeType">
+							<xsd:annotation>
+								<xsd:documentation>Saber AAA City</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="feeName" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Following quoted strings are currently supported:
+									"EXCESS/ PIECES 1-3" (MIXB table)
+									"CHECKED BAGGAGE FEE" (MIXB table)
+									"OVERWEIGHT 51-70L" (MIXB table)
+									"OVERWEIGHT 71-100L" (MIXB table)
+									"SSK" (STK/PRICE table)
+									"SAME-DAY FLT CHANGE" (MISC table)
+									"CA SAME-DAY FLT CHG" (MISC table)
+									"PAID GRP 1 BOARDING" (MISC table)
+									"EXCESS/WITHIN SIZE/WT" (MIXB Table)
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="1" minOccurs="0" name="feeItemId" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Must be populated with one of the values from a string</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element maxOccurs="1" minOccurs="1" name="destinationAirportCode" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>Destination Airport Code to be specified</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element maxOccurs="1" minOccurs="1" name="feeLookupTable" type="FeeLookupTableEnumType">
+							<xsd:annotation>
+								<xsd:documentation>FeeLookupTable to be chosen from the Enum type</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+
+						<xsd:element name="userProfileRequest" type="datasource:UserProfileRequestType">
+							<xsd:annotation>
+								<xsd:documentation>The UserProfile containing airportCode and pseudoCityStation.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+
+			</xsd:element>
+
+			<!-- CloseATACResponse.xsd -->
+			<xsd:element name="CloseATACResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element default="false" name="closed" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation> Boolean indicating that the ATAC was closed. </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<!-- StartExcludedFaresType.xsd -->
+
+			<xsd:complexType name="StartExcludedFaresType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="startExcludedFare" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- CloseC20Response.xsd -->
+
+			<xsd:element name="CloseC20Response">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="responseHeader" type="header:ResponseHeaderType" />
+						<xsd:element default="false" maxOccurs="1" minOccurs="1" name="closed" type="xsd:boolean">
+							<xsd:annotation>
+								<xsd:documentation> Boolean indicating that the C20 was closed. </xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="hostSystemCommands" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									A collection of 0 to N holding host system commands.
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<!-- FullExcludedFaresType.xsd -->
+
+			<xsd:complexType name="FullExcludedFaresType">
+				<xsd:sequence>
+					<xsd:element maxOccurs="unbounded" minOccurs="0" name="fullExcludedFare" type="xsd:string" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<!-- ProductTaxEnumType.xsd -->
+
+			<xsd:simpleType name="ProductTaxEnumType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="GENERIC_FEE_TAX" />
+					<xsd:enumeration value="US_TRANSPORTATION_TAX" />
+					<xsd:enumeration value="CANADA_TRANSPORT_TAX" />
+					<xsd:enumeration value="CANADA_GOODS_AND_SERVICES_TAX" />
+					<xsd:enumeration value="CANADA_HARMONIZED_SALES_TAX" />
+					<xsd:enumeration value="QUEBEC_GOODS_AND_SERVICES_TAX" />
+					<xsd:enumeration value="GB_APD" />
+					<xsd:enumeration value="EU_SOLIDARITY_TAX" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+			<!-- ProductErrorType.xsd -->
+
+			<xsd:simpleType name="ProductErrorType">
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="INVALID_TICKET_NUMBER" />
+					<xsd:enumeration value="INVALID_CHARGE_AMOUNT" />
+					<xsd:enumeration value="DO_NOT_HONOR" />
+				</xsd:restriction>
+			</xsd:simpleType>
+
+		</xsd:schema>
+		<xsd:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://payment.common.ct.aa/fault"
+			version="2.1" xmlns="http://payment.common.ct.aa/fault" xmlns:csping="http://payment.common.ct.aa/operation/ping"
+			xmlns:fault="http://payment.common.ct.aa/fault" xmlns:generic="http://payment.common.ct.aa/generic" xmlns:header="http://payment.common.ct.aa/operation/header"
+			xmlns:location="http://payment.common.ct.aa/location" xmlns:payment="http://payment.common.ct.aa/payment" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+			xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<!-- ServiceFault.xsd -->
+
+
+
+			<xsd:element name="ServiceFault">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="message" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>A Message that describes what was taking place when this issue happened</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="rootCause" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>The Root Cause should describe the exception or issue that
+									is causing the main problem. In many cases this could be the original exception thrown
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element name="fullStackTrace" nillable="true" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									The Full Stack trace of where in the code base this issue happened
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element minOccurs="0" name="transactionID" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Optional. This will be the transaction ID from the 3rd party provider.
+									Use this value to have them look at their logs for insight to what caused the fault
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+						<xsd:element maxOccurs="unbounded" minOccurs="0" name="context" type="xsd:string">
+							<xsd:annotation>
+								<xsd:documentation>
+									Fault context is data the application was working with when this issue happened
+								</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="CardValidationRequest">
+		<wsdl:part element="CardValidationRequest" name="CSPaymentWSCardValidationRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CloseC20Response">
+		<wsdl:part element="CloseC20Response" name="CSPaymentWSCloseC20Response">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProcessCertificateRequest">
+		<wsdl:part element="ProcessCertificateRequest" name="ProcessCertificateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProcessProductFeeVoidRequest">
+		<wsdl:part element="ProcessProductFeeVoidRequest" name="ProcessProductFeeVoidRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ECheckProcessOfferRequest">
+		<wsdl:part element="ECheckProcessOfferRequest" name="CSPaymentWSECheckProcessOfferRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="LookupMultiProductFeeResponse">
+		<wsdl:part element="LookupMultiProductFeeResponse" name="LookupMultiProductFeeResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetCurrencyExchangeRateRequest">
+		<wsdl:part element="GetCurrencyExchangeRateRequest" name="GetCurrencyExchangeRateRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="LookupPromoTableRequest">
+		<wsdl:part element="LookupPromoTableRequest" name="LookupPromoTableRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ServiceError">
+		<wsdl:part element="fault:ServiceFault" name="ServiceFault">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CloseATACResponse">
+		<wsdl:part element="CloseATACResponse" name="CSPaymentWSATACCloseResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetExpressCheckoutDetailsResponse">
+		<wsdl:part element="GetExpressCheckoutDetailsResponse" name="CSPaymentWSGetExpressCheckoutDetailsResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProcessProductFeeResponse">
+		<wsdl:part element="ProcessProductFeeResponse" name="ProcessProductFeeResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="LookupProductFeeResponse">
+		<wsdl:part element="LookupProductFeeResponse" name="LookupProductFeeResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="LookupProductFeeRequest">
+		<wsdl:part element="LookupProductFeeRequest" name="LookupProductFeeRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="LookupMultiProductFeeRequest">
+		<wsdl:part element="LookupMultiProductFeeRequest" name="LookupMultiProductFeeRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="PingResponse">
+		<wsdl:part element="PingResponse" name="PingResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="DoUATPExpressCheckoutPaymentResponse">
+		<wsdl:part element="DoUATPExpressCheckoutPaymentResponse" name="CSPaymentWSDoUATPExpressCheckoutPaymentResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CardValidationResponse">
+		<wsdl:part element="CardValidationResponse" name="CSPaymentWSCardValidationResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CloseATACRequest">
+		<wsdl:part element="CloseATACRequest" name="CSPaymentWSATACCloseRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="CloseC20Request">
+		<wsdl:part element="CloseC20Request" name="CSPaymentWSCloseC20Request">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="LookupPromoTableResponse">
+		<wsdl:part element="LookupPromoTableResponse" name="LookupPromoTableResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SetExpressCheckoutResponse">
+		<wsdl:part element="SetExpressCheckoutResponse" name="CSPaymentWSSetExpressCheckoutResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetExpressCheckoutDetailsRequest">
+		<wsdl:part element="GetExpressCheckoutDetailsRequest" name="CSPaymentWSGetExpressCheckoutDetailsRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ECheckProcessOfferResponse">
+		<wsdl:part element="ECheckProcessOfferResponse" name="CSPaymentWSECheckProcessOfferResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="SetExpressCheckoutRequest">
+		<wsdl:part element="SetExpressCheckoutRequest" name="CSPaymentWSSetExpressCheckoutRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="PingRequest">
+		<wsdl:part element="csping:PingRequest" name="PingRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="DoUATPExpressCheckoutPaymentRequest">
+		<wsdl:part element="DoUATPExpressCheckoutPaymentRequest" name="CSPaymentWSDoUATPExpressCheckoutPaymentRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProcessProductFeeVoidResponse">
+		<wsdl:part element="ProcessProductFeeVoidResponse" name="ProcessProductFeeVoidResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="GetCurrencyExchangeRateResponse">
+		<wsdl:part element="GetCurrencyExchangeRateResponse" name="GetCurrencyExchangeRateResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProcessCertificateResponse">
+		<wsdl:part element="ProcessCertificateResponse" name="ProcessCertificateResponse">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ProcessProductFeeRequest">
+		<wsdl:part element="ProcessProductFeeRequest" name="ProcessProductFeeRequest">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="CSPaymentWS">
+		<wsdl:operation name="setExpressCheckout">
+			<wsdl:documentation>It calls the Paypal's setExpressCheckout operation which sets up the paypal session for the
+				Paypal Web site with the given currency and URLs and returns the Session token for next api calls and for redirect
+				URL. For further information on Paypal, visit
+				https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&amp;content_ID=developer/e_howto_api_ECGettingStarted
+			</wsdl:documentation>
+			<wsdl:input message="SetExpressCheckoutRequest" name="SetExpressCheckoutRequest">
+			</wsdl:input>
+			<wsdl:output message="SetExpressCheckoutResponse" name="SetExpressCheckoutResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="SetExpressCheckoutServiceFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getExpressCheckoutDetails">
+			<wsdl:documentation>It calls the Paypal's getExpressCheckoutDetails operation to get the payer details.
+			</wsdl:documentation>
+			<wsdl:input message="GetExpressCheckoutDetailsRequest" name="GetExpressCheckoutDetailsRequest">
+			</wsdl:input>
+			<wsdl:output message="GetExpressCheckoutDetailsResponse" name="GetExpressCheckoutDetailsResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="GetExpressCheckoutDetailsServiceFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="doUATPExpressCheckoutPayment">
+			<wsdl:documentation>It calls the Paypal's doUATPExpressCheckpoutPayment operation to complete the express checkout
+				transaction with the actual amount.</wsdl:documentation>
+			<wsdl:input message="DoUATPExpressCheckoutPaymentRequest" name="DoUATPExpressCheckoutPaymentRequest">
+			</wsdl:input>
+			<wsdl:output message="DoUATPExpressCheckoutPaymentResponse" name="DoUATPExpressCheckoutPaymentResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="DoUATPExpressCheckoutPaymentServiceFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ping">
+			<wsdl:documentation>
+				"health check" of the service and external third party payment gateways to make sure they all are up and responsive
+			</wsdl:documentation>
+			<wsdl:input message="PingRequest" name="PingRequest">
+			</wsdl:input>
+			<wsdl:output message="PingResponse" name="PingResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="PingFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="validateCreditCard">
+			<wsdl:documentation>It calls the Orbitz API to validate Credit Card (only VISA, MASTERCARD and AMEX.
+			</wsdl:documentation>
+			<wsdl:input message="CardValidationRequest" name="CardValidationRequest">
+			</wsdl:input>
+			<wsdl:output message="CardValidationResponse" name="CardValidationResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="CardValidationFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="closeATAC">
+			<wsdl:documentation>It calls the Orbitz API to closeATAC.</wsdl:documentation>
+			<wsdl:input message="CloseATACRequest" name="CloseATACRequest">
+			</wsdl:input>
+			<wsdl:output message="CloseATACResponse" name="CloseATACResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="ATACCloseFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="closeC20">
+			<wsdl:documentation>It calls the Orbitz API to closeC20.</wsdl:documentation>
+			<wsdl:input message="CloseC20Request" name="CloseC20Request">
+			</wsdl:input>
+			<wsdl:output message="CloseC20Response" name="CloseC20Response">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="C20CloseFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="authorizeECheck">
+			<wsdl:documentation>Authorizes Electronic Check.</wsdl:documentation>
+			<wsdl:input message="ECheckProcessOfferRequest" name="ECheckProcessOfferRequest">
+			</wsdl:input>
+			<wsdl:output message="ECheckProcessOfferResponse" name="ECheckProcessOfferResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="ECheckProcessOfferServiceFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="processCertificate">
+			<wsdl:documentation>It calls the Orbitz API to process Certificates.</wsdl:documentation>
+			<wsdl:input message="ProcessCertificateRequest" name="ProcessCertificateRequest">
+			</wsdl:input>
+			<wsdl:output message="ProcessCertificateResponse" name="ProcessCertificateResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="ProcessCertificateFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="processProductFee">
+			<wsdl:documentation>It calls the Orbitz API to process Certificates.</wsdl:documentation>
+			<wsdl:input message="ProcessProductFeeRequest" name="ProcessProductFeeRequest">
+			</wsdl:input>
+			<wsdl:output message="ProcessProductFeeResponse" name="ProcessProductFeeResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="ProcessProductFeeFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="lookupProductFee">
+			<wsdl:documentation>To lookup product fee.</wsdl:documentation>
+			<wsdl:input message="LookupProductFeeRequest" name="LookupProductFeeRequest">
+			</wsdl:input>
+			<wsdl:output message="LookupProductFeeResponse" name="LookupProductFeeResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="LookupProductFeeFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="lookupMultiProductFee">
+			<wsdl:documentation>To lookup multiple product fee.</wsdl:documentation>
+			<wsdl:input message="LookupMultiProductFeeRequest" name="LookupMultiProductFeeRequest">
+			</wsdl:input>
+			<wsdl:output message="LookupMultiProductFeeResponse" name="LookupMultiProductFeeResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="LookupMultiProductFeeFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="processProductFeeVoid">
+			<wsdl:documentation>To void product fee.</wsdl:documentation>
+			<wsdl:input message="ProcessProductFeeVoidRequest" name="ProcessProductFeeVoidRequest">
+			</wsdl:input>
+			<wsdl:output message="ProcessProductFeeVoidResponse" name="ProcessProductFeeVoidResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="ProcessProductFeeVoidFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="lookupPromoTable">
+			<wsdl:documentation>To lookup promo table.</wsdl:documentation>
+			<wsdl:input message="LookupPromoTableRequest" name="LookupPromoTableRequest">
+			</wsdl:input>
+			<wsdl:output message="LookupPromoTableResponse" name="LookupPromoTableResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="LookupPromoTableFault">
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getCurrencyExchangeRate">
+			<wsdl:documentation>To get currency exchange rates.</wsdl:documentation>
+			<wsdl:input message="GetCurrencyExchangeRateRequest" name="GetCurrencyExchangeRateRequest">
+			</wsdl:input>
+			<wsdl:output message="GetCurrencyExchangeRateResponse" name="GetCurrencyExchangeRateResponse">
+			</wsdl:output>
+			<wsdl:fault message="ServiceError" name="GetCurrencyExchangeRateFault">
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="CSPaymentWSSOAPBinding" type="CSPaymentWS">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="setExpressCheckout">
+			<soap:operation soapAction="" />
+			<wsdl:input name="SetExpressCheckoutRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="SetExpressCheckoutResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="SetExpressCheckoutServiceFault">
+				<soap:fault name="SetExpressCheckoutServiceFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getExpressCheckoutDetails">
+			<soap:operation soapAction="" />
+			<wsdl:input name="GetExpressCheckoutDetailsRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="GetExpressCheckoutDetailsResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="GetExpressCheckoutDetailsServiceFault">
+				<soap:fault name="GetExpressCheckoutDetailsServiceFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="doUATPExpressCheckoutPayment">
+			<soap:operation soapAction="" />
+			<wsdl:input name="DoUATPExpressCheckoutPaymentRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="DoUATPExpressCheckoutPaymentResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="DoUATPExpressCheckoutPaymentServiceFault">
+				<soap:fault name="DoUATPExpressCheckoutPaymentServiceFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="ping">
+			<soap:operation soapAction="" />
+			<wsdl:input name="PingRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="PingResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="PingFault">
+				<soap:fault name="PingFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="validateCreditCard">
+			<soap:operation soapAction="" />
+			<wsdl:input name="CardValidationRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CardValidationResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="CardValidationFault">
+				<soap:fault name="CardValidationFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="closeATAC">
+			<soap:operation soapAction="" />
+			<wsdl:input name="CloseATACRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CloseATACResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ATACCloseFault">
+				<soap:fault name="ATACCloseFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="closeC20">
+			<soap:operation soapAction="" />
+			<wsdl:input name="CloseC20Request">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="CloseC20Response">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="C20CloseFault">
+				<soap:fault name="C20CloseFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="processCertificate">
+			<soap:operation soapAction="" />
+			<wsdl:input name="ProcessCertificateRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ProcessCertificateResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ProcessCertificateFault">
+				<soap:fault name="ProcessCertificateFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="processProductFee">
+			<soap:operation soapAction="" />
+			<wsdl:input name="ProcessProductFeeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ProcessProductFeeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ProcessProductFeeFault">
+				<soap:fault name="ProcessProductFeeFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="lookupProductFee">
+			<soap:operation soapAction="" />
+			<wsdl:input name="LookupProductFeeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="LookupProductFeeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="LookupProductFeeFault">
+				<soap:fault name="LookupProductFeeFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="lookupMultiProductFee">
+			<soap:operation soapAction="" />
+			<wsdl:input name="LookupMultiProductFeeRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="LookupMultiProductFeeResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="LookupMultiProductFeeFault">
+				<soap:fault name="LookupMultiProductFeeFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="processProductFeeVoid">
+			<soap:operation soapAction="" />
+			<wsdl:input name="ProcessProductFeeVoidRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ProcessProductFeeVoidResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ProcessProductFeeVoidFault">
+				<soap:fault name="ProcessProductFeeVoidFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="lookupPromoTable">
+			<soap:operation soapAction="" />
+			<wsdl:input name="LookupPromoTableRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="LookupPromoTableResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="LookupPromoTableFault">
+				<soap:fault name="LookupPromoTableFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="authorizeECheck">
+			<soap:operation soapAction="" />
+			<wsdl:input name="ECheckProcessOfferRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="ECheckProcessOfferResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ECheckProcessOfferServiceFault">
+				<soap:fault name="ECheckProcessOfferServiceFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		<wsdl:operation name="getCurrencyExchangeRate">
+			<soap:operation soapAction="" />
+			<wsdl:input name="GetCurrencyExchangeRateRequest">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="GetCurrencyExchangeRateResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="GetCurrencyExchangeRateFault">
+				<soap:fault name="GetCurrencyExchangeRateFault" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="CSPaymentWSService">
+		<wsdl:port binding="CSPaymentWSSOAPBinding" name="CSPaymentWS">
+			<soap:address location="http://cspayment-id/CSPaymentWS15_3_2/services/CSPaymentWSService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
