@@ -97,18 +97,18 @@ Execute: http://localhost:8888/ws/person?wsdl and save wsdl result as person.wsd
 
 ## Step 3 Download SoapUI
 ###Create Soap project
-![alt text](https://github.com/stericardo/amaris-steven/blob/main/images/createsoapproject.png?raw=true)
+![alt text](https://github.com/stericardo/wsdl-wsimport/blob/main/images/createsoapproject.png?raw=true)
 
 ### Select Person WSDL from wsdl-wsimport\client-httpconnection-wsdl\src\main\wsdl
-![alt text](https://github.com/stericardo/amaris-steven/blob/main/images/select-personwsdl.png?raw=true)
+![alt text](https://github.com/stericardo/wsdl-wsimport/blob/main/images/select-personwsdl.png?raw=true)
 
 Show Interface viewer:
 
-![alt text](https://github.com/stericardo/amaris-steven/blob/main/images/showinterface.png?raw=true)
+![alt text](https://github.com/stericardo/wsdl-wsimport/blob/main/images/showinterface.png?raw=true)
 
 Save xsd file on wsdl-wsimport/client-httpconnection-wsdl/src/main/xsd/person.xsd:
 
-![alt text](https://github.com/stericardo/amaris-steven/blob/main/images/savexsd.png?raw=true)
+![alt text](https://github.com/stericardo/wsdl-wsimport/blob/main/images/savexsd.png?raw=true)
 
 Finally will be created a new wsdl pointed out to our xsd generated: then on plug in add the new wsdl file: <schemaFiles>person_1.wsdl</schemaFiles>
 and update person_1.wsdl with the next property schemaLocation="../xsd/person.xsd"
